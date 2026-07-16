@@ -8,6 +8,7 @@ class VoryntApiApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
