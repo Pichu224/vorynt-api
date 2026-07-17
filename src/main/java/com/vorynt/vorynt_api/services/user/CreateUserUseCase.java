@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
-public class CreateUserService {
+public class CreateUserUseCase {
 
     private final UserRepository userRepository;
 

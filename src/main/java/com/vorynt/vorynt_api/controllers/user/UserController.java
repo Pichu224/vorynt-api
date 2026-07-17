@@ -4,7 +4,7 @@ import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.dtos.user.CreateUserRequest;
 import com.vorynt.vorynt_api.dtos.user.UserResponse;
 import com.vorynt.vorynt_api.mappers.UserMapper;
-import com.vorynt.vorynt_api.services.user.CreateUserService;
+import com.vorynt.vorynt_api.services.user.CreateUserUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final CreateUserService createUserService;
+    private final CreateUserUseCase createUserUseCase;
 
     @PostMapping
     public ResponseEntity<UserResponse> create(
             @Valid @RequestBody CreateUserRequest request
     ) {
 
-        User user = createUserService.execute(
+        User user = createUserUseCase.execute(
                 request.firstName(),
                 request.lastName(),
                 request.email(),

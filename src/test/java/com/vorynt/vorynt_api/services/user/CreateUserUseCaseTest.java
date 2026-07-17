@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CreateUserServiceTest {
+class CreateUserUseCaseTest {
 
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
-    private CreateUserService service;
+    private CreateUserUseCase service;
 
     @Test
     void shouldCreateUserSuccessfully() {

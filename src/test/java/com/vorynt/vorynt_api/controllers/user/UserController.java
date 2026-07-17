@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.dtos.user.CreateUserRequest;
-import com.vorynt.vorynt_api.services.user.CreateUserService;
+import com.vorynt.vorynt_api.services.user.CreateUserUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,7 +26,7 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CreateUserService createUserService;
+    private CreateUserUseCase createUserUseCase;
 
     @Test
     void shouldCreateUserSuccessfully() throws Exception {
@@ -46,7 +46,7 @@ class UserControllerTest {
                 "123456"
         );
 
-        when(createUserService.execute(
+        when(createUserUseCase.execute(
                 anyString(),
                 anyString(),
                 anyString(),
@@ -63,7 +63,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.lastName").value("acuna"))
                 .andExpect(jsonPath("$.email").value("alan@gmail.com"));
 
-        verify(createUserService, times(1))
+        verify(createUserUseCase, times(1))
                 .execute(
                         "Alan",
                         "acuna",
