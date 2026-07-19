@@ -23,7 +23,7 @@ class CreateUserUseCaseTest {
     @Test
     void shouldCreateUserSuccessfully() {
         // Arrange
-        when(userRepository.existsByEmail(any())).thenReturn(false);
+        when(userRepository.existsByEmailAndEnabledTrue(any())).thenReturn(false);
         when(userRepository.save(any(User.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -41,14 +41,14 @@ class CreateUserUseCaseTest {
         assertEquals("acuna", user.getLastName());
         assertEquals("alan@gmail.com", user.getEmail().getValue());
 
-        verify(userRepository).existsByEmail(any());
+        verify(userRepository).existsByEmailAndEnabledTrue(any());
         verify(userRepository).save(any(User.class));
     }
 
     @Test
     void shouldThrowExceptionWhenEmailAlreadyExists() {
         // Arrange
-        when(userRepository.existsByEmail(any())).thenReturn(true);
+        when(userRepository.existsByEmailAndEnabledTrue(any())).thenReturn(true);
 
         // Act & Assert
         assertThrows(
@@ -61,7 +61,7 @@ class CreateUserUseCaseTest {
                 )
         );
 
-        verify(userRepository).existsByEmail(any());
+        verify(userRepository).existsByEmailAndEnabledTrue(any());
         verify(userRepository, never()).save(any());
     }
 }

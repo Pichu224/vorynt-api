@@ -33,7 +33,7 @@ class UpdateUserUseCaseTest {
                 "hash"
         );
 
-        when(repository.findById(1L)).thenReturn(Optional.of(user));
+        when(repository.findByIdAndEnabledTrue(1L)).thenReturn(Optional.of(user));
 
         // Act
         User updated = useCase.execute(
@@ -51,7 +51,7 @@ class UpdateUserUseCaseTest {
     void shouldThrowWhenUserDoesNotExist() {
 
         // Arrange
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        when(repository.findByIdAndEnabledTrue(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(

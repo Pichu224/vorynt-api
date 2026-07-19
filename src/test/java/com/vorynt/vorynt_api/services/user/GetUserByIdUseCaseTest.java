@@ -32,20 +32,20 @@ class GetUserByIdUseCaseTest {
                 "hash"
         );
 
-        when(repository.findById(1L)).thenReturn(Optional.of(user));
+        when(repository.findByIdAndEnabledTrue(1L)).thenReturn(Optional.of(user));
 
         // Act
         User result = useCase.execute(1L);
 
         // Assert
         assertEquals(user, result);
-        verify(repository).findById(1L);
+        verify(repository).findByIdAndEnabledTrue(1L);
     }
 
     @Test
     void shouldThrowWhenUserDoesNotExist() {
         // Arrange
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        when(repository.findByIdAndEnabledTrue(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(

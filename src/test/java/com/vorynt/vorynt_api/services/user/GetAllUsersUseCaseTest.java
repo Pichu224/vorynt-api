@@ -30,13 +30,13 @@ class GetAllUsersUseCaseTest {
                 User.create("Juan", "Perez", Email.of("juan@gmail.com"), "hash")
         );
 
-        when(repository.findAll()).thenReturn(users);
+        when(repository.findAllByEnabledTrue()).thenReturn(users);
 
         // Act
         List<User> result = useCase.execute();
 
         // Assert
         assertEquals(2, result.size());
-        verify(repository).findAll();
+        verify(repository).findAllByEnabledTrue();
     }
 }
