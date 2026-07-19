@@ -38,7 +38,7 @@ public class CreateUserUseCase {
     }
 
     private void verifyEmailAvailability(Email email) {
-        if (userRepository.existsByEmail(email))
+        if (userRepository.existsByEmailAndEnabledTrue(email))
             throw new EmailAlreadyExistsException(email);
     }
 }

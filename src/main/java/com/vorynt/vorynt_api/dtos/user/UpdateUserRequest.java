@@ -1,4 +1,12 @@
 package com.vorynt.vorynt_api.dtos.user;
 
-public record UpdateUserRequest() {
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateUserRequest(
+
+        @NotBlank
+        String firstName,
+
+        @NotBlank
+        String lastName
+) {}

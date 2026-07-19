@@ -15,7 +15,7 @@ public class DeleteUserUseCase {
 
     @Transactional
     public void execute(Long id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         user.deactivate();

@@ -13,7 +13,7 @@ public class GetUserByIdUseCase {
     private final UserRepository userRepository;
 
     public User execute(Long id) {
-        return userRepository.findById(id)
+        return userRepository.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

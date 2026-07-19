@@ -13,6 +13,6 @@ public class GetAllUsersUseCase {
     private final UserRepository userRepository;
 
     public List<User> execute() {
-        return userRepository.findAll();
+        return userRepository.findAllByEnabledTrue();
     }
 }

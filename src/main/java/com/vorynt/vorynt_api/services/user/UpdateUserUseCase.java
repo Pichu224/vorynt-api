@@ -15,7 +15,7 @@ public class UpdateUserUseCase {
 
     @Transactional
     public User execute(Long id, String firstName, String lastName) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         user.changeFirstName(firstName);
