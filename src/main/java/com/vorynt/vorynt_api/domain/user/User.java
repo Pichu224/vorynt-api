@@ -7,11 +7,11 @@ import com.vorynt.vorynt_api.persistence.converters.EmailConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor // Requerido por JPA
+@NoArgsConstructor
 @Getter
 public class User {
 
@@ -40,21 +40,35 @@ public class User {
     private boolean enabled;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
-    private User(String firstName,
-                String lastName,
-                Email email,
-                String passwordHash) {
+    @Column(nullable = false)
+    private OffsetDateTime updatedAt;
 
-        this.changeFirstName(firstName);
-        this.changeLastName(lastName);
-        this.changeEmail(email);
-        this.changePasswordHash(passwordHash);
+    private User(
+            String firstName,
+            String lastName,
+            Email email,
+            String passwordHash
+    ) {
+        validateRequired(firstName, "firstName");
+        validateRequired(lastName, "lastName");
+        validateRequired(passwordHash, "passwordHash");
+
+        if (email == null)
+            throw new InvalidEmailException("Email cannot be null.");
+
+        this.firstName = normalizeName(firstName);
+        this.lastName = normalizeName(lastName);
+        this.email = email;
+        this.passwordHash = passwordHash;
 
         this.role = Role.CLIENT;
         this.enabled = true;
-        this.createdAt = LocalDateTime.now();
+
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
     public static User create(
@@ -67,50 +81,61 @@ public class User {
     }
 
     public void changeFirstName(String firstName) {
-        this.validateRequired(firstName, "firstName");
-        this.firstName = this.normalizeName(firstName);
+        validateRequired(firstName, "firstName");
+        this.firstName = normalizeName(firstName);
+        touch();
     }
 
     public void changeLastName(String lastName) {
-        this.validateRequired(lastName, "lastName");
-        this.lastName = this.normalizeName(lastName);
+        validateRequired(lastName, "lastName");
+        this.lastName = normalizeName(lastName);
+        touch();
     }
 
     public void changeEmail(Email email) {
         if (email == null)
             throw new InvalidEmailException("Email cannot be null.");
+
         this.email = email;
+        touch();
     }
 
     public void changePasswordHash(String passwordHash) {
-        this.validateRequired(passwordHash, "passwordHash");
+        validateRequired(passwordHash, "passwordHash");
         this.passwordHash = passwordHash;
+        touch();
+    }
+
+    public void promoteToAdmin() {
+        this.role = Role.ADMIN;
+        touch();
+    }
+
+    public void demoteToClient() {
+        this.role = Role.CLIENT;
+        touch();
+    }
+
+    public void activate() {
+        this.enabled = true;
+        touch();
+    }
+
+    public void deactivate() {
+        this.enabled = false;
+        touch();
+    }
+
+    private void touch() {
+        this.updatedAt = OffsetDateTime.now();
     }
 
     private String normalizeName(String name) {
         return name.trim();
     }
 
-    public void promoteToAdmin() {
-        this.role = Role.ADMIN;
-    }
-
-    public void demoteToClient() {
-        this.role = Role.CLIENT;
-    }
-
-    public void activate() {
-        this.enabled = true;
-    }
-
-    public void deactivate() {
-        this.enabled = false;
-    }
-
     private void validateRequired(String value, String field) {
-        if(value == null)
-            throw new RequiredFieldException(field);
-        if (value.isBlank())
+        if (value == null || value.isBlank())
             throw new RequiredFieldException(field);
     }
 }

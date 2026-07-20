@@ -1,14 +1,17 @@
 package com.vorynt.vorynt_api.domain.user;
 
+import com.vorynt.vorynt_api.domain.exceptions.InvalidEmailException;
 import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import org.junit.jupiter.api.Test;
+import java.time.OffsetDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
 
     @Test
     void shouldCreateClientUser() {
+
         // Arrange
         Email email = Email.of("alan@gmail.com");
 
@@ -28,13 +31,13 @@ class UserTest {
                 () -> assertEquals("hashedPassword", user.getPasswordHash()),
                 () -> assertEquals(Role.CLIENT, user.getRole()),
                 () -> assertTrue(user.isEnabled()),
-                () -> assertNotNull(user.getCreatedAt())
+                () -> assertNotNull(user.getCreatedAt()),
+                () -> assertNotNull(user.getUpdatedAt())
         );
     }
 
     @Test
     void shouldNormalizeNamesWhenCreatingUser() {
-        // Arrange
 
         // Act
         User user = User.create(
@@ -53,13 +56,9 @@ class UserTest {
 
     @Test
     void shouldChangeFirstName() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         // Act
         user.changeFirstName("Juan");
@@ -69,14 +68,23 @@ class UserTest {
     }
 
     @Test
-    void shouldChangeLastName() {
+    void shouldNormalizeFirstNameWhenChangingIt() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
+
+        // Act
+        user.changeFirstName("   Juan   ");
+
+        // Assert
+        assertEquals("Juan", user.getFirstName());
+    }
+
+    @Test
+    void shouldChangeLastName() {
+
+        // Arrange
+        User user = createUser();
 
         // Act
         user.changeLastName("Perez");
@@ -87,13 +95,9 @@ class UserTest {
 
     @Test
     void shouldChangeEmail() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         Email newEmail = Email.of("juan@gmail.com");
 
@@ -106,13 +110,9 @@ class UserTest {
 
     @Test
     void shouldChangePasswordHash() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         // Act
         user.changePasswordHash("newHash");
@@ -123,13 +123,9 @@ class UserTest {
 
     @Test
     void shouldPromoteUserToAdmin() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         // Act
         user.promoteToAdmin();
@@ -140,13 +136,9 @@ class UserTest {
 
     @Test
     void shouldDemoteAdminToClient() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         user.promoteToAdmin();
 
@@ -159,13 +151,9 @@ class UserTest {
 
     @Test
     void shouldActivateUser() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         user.deactivate();
 
@@ -178,13 +166,9 @@ class UserTest {
 
     @Test
     void shouldDeactivateUser() {
+
         // Arrange
-        User user = User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
-        );
+        User user = createUser();
 
         // Act
         user.deactivate();
@@ -194,7 +178,42 @@ class UserTest {
     }
 
     @Test
+    void shouldUpdateUpdatedAtWhenChangingFirstName() throws InterruptedException {
+
+        // Arrange
+        User user = createUser();
+
+        OffsetDateTime previousUpdatedAt = user.getUpdatedAt();
+
+        Thread.sleep(5);
+
+        // Act
+        user.changeFirstName("Juan");
+
+        // Assert
+        assertTrue(user.getUpdatedAt().isAfter(previousUpdatedAt));
+    }
+
+    @Test
+    void shouldUpdateUpdatedAtWhenDeactivatingUser() throws InterruptedException {
+
+        // Arrange
+        User user = createUser();
+
+        OffsetDateTime previousUpdatedAt = user.getUpdatedAt();
+
+        Thread.sleep(5);
+
+        // Act
+        user.deactivate();
+
+        // Assert
+        assertTrue(user.getUpdatedAt().isAfter(previousUpdatedAt));
+    }
+
+    @Test
     void shouldRejectBlankFirstName() {
+
         assertThrows(
                 RequiredFieldException.class,
                 () -> User.create(
@@ -208,6 +227,7 @@ class UserTest {
 
     @Test
     void shouldRejectBlankLastName() {
+
         assertThrows(
                 RequiredFieldException.class,
                 () -> User.create(
@@ -221,6 +241,7 @@ class UserTest {
 
     @Test
     void shouldRejectNullPasswordHash() {
+
         assertThrows(
                 RequiredFieldException.class,
                 () -> User.create(
@@ -229,6 +250,29 @@ class UserTest {
                         Email.of("alan@gmail.com"),
                         null
                 )
+        );
+    }
+
+    @Test
+    void shouldRejectNullEmail() {
+
+        assertThrows(
+                InvalidEmailException.class,
+                () -> User.create(
+                        "Alan",
+                        "Acuna",
+                        null,
+                        "hashedPassword"
+                )
+        );
+    }
+
+    private User createUser() {
+        return User.create(
+                "Alan",
+                "Acuna",
+                Email.of("alan@gmail.com"),
+                "hashedPassword"
         );
     }
 }
