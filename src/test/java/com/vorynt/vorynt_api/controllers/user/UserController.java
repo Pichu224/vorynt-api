@@ -17,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -39,7 +38,7 @@ class UserControllerTest {
     private UserMapper userMapper;
 
     @MockBean
-    private CreateUserUseCase createUserUseCase;
+    private RegisterUserUseCase registerUserUseCase;
 
     @MockBean
     private UpdateUserUseCase updateUserUseCase;
@@ -79,7 +78,7 @@ class UserControllerTest {
                         "alan@gmail.com"
                 ));
 
-        when(createUserUseCase.execute(
+        when(registerUserUseCase.execute(
                 anyString(),
                 anyString(),
                 anyString(),
@@ -96,7 +95,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.lastName").value("acuna"))
                 .andExpect(jsonPath("$.email").value("alan@gmail.com"));
 
-        verify(createUserUseCase, times(1))
+        verify(registerUserUseCase, times(1))
                 .execute(
                         "Alan",
                         "acuna",
@@ -120,7 +119,7 @@ class UserControllerTest {
                 "123456"
         );
 
-        when(createUserUseCase.execute(
+        when(registerUserUseCase.execute(
                 anyString(),
                 anyString(),
                 anyString(),
@@ -141,7 +140,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message")
                         .value("Email 'alan@gmail.com' is already registered."));
 
-        verify(createUserUseCase).execute(
+        verify(registerUserUseCase).execute(
                 "Alan",
                 "acuna",
                 "alan@gmail.com",

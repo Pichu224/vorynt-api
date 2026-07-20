@@ -138,4 +138,15 @@ public class User {
         if (value == null || value.isBlank())
             throw new RequiredFieldException(field);
     }
+
+    public void reactivate(
+            String firstName,
+            String lastName,
+            String passwordHash
+    ) {
+        changeFirstName(firstName);
+        changeLastName(lastName);
+        changePasswordHash(passwordHash);
+        activate();
+    }
 }

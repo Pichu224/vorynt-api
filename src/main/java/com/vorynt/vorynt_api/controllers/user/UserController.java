@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final CreateUserUseCase createUserUseCase;
+    private final RegisterUserUseCase registerUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetAllUsersUseCase getAllUsersUseCase;
@@ -30,7 +30,7 @@ public class UserController {
             @Valid @RequestBody CreateUserRequest request
     ) {
 
-        User user = createUserUseCase.execute(
+        User user = registerUserUseCase.execute(
                 request.firstName(),
                 request.lastName(),
                 request.email(),

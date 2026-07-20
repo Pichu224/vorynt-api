@@ -9,6 +9,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
 
+    private User createUser() {
+        return User.create(
+                "Alan",
+                "Acuna",
+                Email.of("alan@gmail.com"),
+                "hashedPassword"
+        );
+    }
+
     @Test
     void shouldCreateClientUser() {
 
@@ -267,12 +276,22 @@ class UserTest {
         );
     }
 
-    private User createUser() {
-        return User.create(
-                "Alan",
-                "Acuna",
-                Email.of("alan@gmail.com"),
-                "hashedPassword"
+    @Test
+    void shouldReactivateDisabledUser() {
+        User user = createUser();
+
+        user.deactivate();
+
+        user.reactivate(
+                "Juan",
+                "Perez",
+                "nuevoHash"
         );
+
+        assertTrue(user.isEnabled());
+        assertEquals("Juan", user.getFirstName());
+        assertEquals("Perez", user.getLastName());
+        assertEquals("nuevoHash", user.getPasswordHash());
     }
+
 }
