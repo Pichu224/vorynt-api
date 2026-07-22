@@ -1,7 +1,6 @@
 package com.vorynt.vorynt_api.domain.user.valueObjects;
 
 import com.vorynt.vorynt_api.domain.exceptions.InvalidEmailException;
-import jakarta.persistence.Converter;
 import lombok.Getter;
 import java.util.regex.Pattern;
 
