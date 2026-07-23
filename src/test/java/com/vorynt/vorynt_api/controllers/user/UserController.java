@@ -9,6 +9,7 @@ import com.vorynt.vorynt_api.dtos.user.CreateUserRequest;
 import com.vorynt.vorynt_api.dtos.user.UpdateUserRequest;
 import com.vorynt.vorynt_api.dtos.user.UserResponse;
 import com.vorynt.vorynt_api.mappers.UserMapper;
+import com.vorynt.vorynt_api.services.auth.RegisterUserUseCase;
 import com.vorynt.vorynt_api.services.user.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

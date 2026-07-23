@@ -1,4 +1,6 @@
 package com.vorynt.vorynt_api.dtos.auth;
 
-public record LoginRequest() {
-}
+public record LoginRequest(
+        String email,
+        String password
+) {}

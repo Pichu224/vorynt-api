@@ -91,6 +91,13 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.BAD_REQUEST, ex);
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> invalidCredentialsException(
+            InvalidCredentialsException ex
+    ) {
+        return buildError(HttpStatus.UNAUTHORIZED, ex);
+    }
+
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ApiErrorResponse> domainException(
             DomainException ex
