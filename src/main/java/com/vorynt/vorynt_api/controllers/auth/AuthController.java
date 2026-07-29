@@ -36,11 +36,11 @@ public class AuthController {
                 registerRequest.password()
         );
 
-        return login(
-                new LoginRequest(
-                        user.getEmail().getValue(),
-                        user.getPasswordHash()
-                )
+        String token = loginUseCase.execute(
+                registerRequest.email(),
+                registerRequest.password()
         );
+
+        return new AuthResponse(token);
     }
 }

@@ -180,13 +180,13 @@ public class GlobalExceptionHandler {
 
     // Fallback exception
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiErrorResponse> unexpectedException(
-//            Exception ex
-//    ) {
-//        return buildError(
-//                HttpStatus.INTERNAL_SERVER_ERROR,
-//                "An unexpected error occurred."
-//        );
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> unexpectedException(
+            Exception ex
+    ) {
+        return buildError(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "An unexpected error occurred."
+        );
+    }
 }

@@ -24,6 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
                                 "User not found."
                         ));
 
-        return new CustomUserDetails(user);
+        return new CustomUserDetails(
+                user.getId(),
+                user.getEmail().getValue(),
+                user.getPasswordHash(),
+                user.isEnabled(),
+                user.getRole()
+        );
     }
 }

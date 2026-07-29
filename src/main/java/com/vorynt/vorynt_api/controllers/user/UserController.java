@@ -24,6 +24,7 @@ public class UserController {
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
+    private final GetCurrentUserUseCase  getCurrentUserUseCase;
     private final UserMapper userMapper;
 
     @PostMapping
@@ -86,6 +87,15 @@ public class UserController {
             @PathVariable Long id
     ) {
         User user = getUserByIdUseCase.execute(id);
+
+        UserResponse response = userMapper.toResponse(user);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        User user = getCurrentUserUseCase.execute();
 
         UserResponse response = userMapper.toResponse(user);
 
