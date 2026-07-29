@@ -20,6 +20,16 @@ public class CustomUserDetails implements UserDetails {
     private final boolean enabled;
     private final Role role;
 
+    public static CustomUserDetails from(User user) {
+        return new CustomUserDetails(
+                user.getId(),
+                user.getEmail().getValue(),
+                user.getPasswordHash(),
+                user.isEnabled(),
+                user.getRole()
+        );
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(

@@ -6,6 +6,7 @@ import com.vorynt.vorynt_api.dtos.auth.LoginRequest;
 import com.vorynt.vorynt_api.dtos.auth.RegisterRequest;
 import com.vorynt.vorynt_api.services.auth.LoginUseCase;
 import com.vorynt.vorynt_api.services.auth.RegisterUserUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,15 +22,15 @@ public class AuthController {
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
+    public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
         String token = loginUseCase.execute(loginRequest.email(),  loginRequest.password());
 
         return new AuthResponse(token);
     }
 
     @PostMapping("/register")
-    public AuthResponse auth(@RequestBody RegisterRequest registerRequest) {
-        User user = registerUserUseCase.execute(
+    public AuthResponse auth(@Valid @RequestBody RegisterRequest registerRequest) {
+        registerUserUseCase.execute(
                 registerRequest.firstName(),
                 registerRequest.lastName(),
                 registerRequest.email(),

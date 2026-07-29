@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -28,11 +29,12 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> create(
             @Valid @RequestBody CreateUserRequest request
     ) {
 
-        User user = registerUserUseCase.execute(
+        User user = registerUserUseCase.execute( // todo - cambiar a hacer un create user.
                 request.firstName(),
                 request.lastName(),
                 request.email(),

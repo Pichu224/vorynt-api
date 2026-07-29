@@ -38,7 +38,7 @@ class UserTest {
                 () -> assertEquals("Acuna", user.getLastName()),
                 () -> assertEquals(email, user.getEmail()),
                 () -> assertEquals("hashedPassword", user.getPasswordHash()),
-                () -> assertEquals(Role.CLIENT, user.getRole()),
+                () -> assertEquals(Role.USER, user.getRole()),
                 () -> assertTrue(user.isEnabled()),
                 () -> assertNotNull(user.getCreatedAt()),
                 () -> assertNotNull(user.getUpdatedAt())
@@ -152,10 +152,10 @@ class UserTest {
         user.promoteToAdmin();
 
         // Act
-        user.demoteToClient();
+        user.demoteToUser();
 
         // Assert
-        assertEquals(Role.CLIENT, user.getRole());
+        assertEquals(Role.USER, user.getRole());
     }
 
     @Test
