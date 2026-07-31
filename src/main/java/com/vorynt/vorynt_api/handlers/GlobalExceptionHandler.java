@@ -3,9 +3,11 @@ package com.vorynt.vorynt_api.handlers;
 import com.vorynt.vorynt_api.domain.exceptions.*;
 import com.vorynt.vorynt_api.dtos.error.ApiErrorResponse;
 import com.vorynt.vorynt_api.dtos.error.FieldErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.io.Console;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -89,6 +93,13 @@ public class GlobalExceptionHandler {
             RequiredFieldException ex
     ) {
         return buildError(HttpStatus.BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> invalidCredentialsException(
+            InvalidCredentialsException ex
+    ) {
+        return buildError(HttpStatus.UNAUTHORIZED, ex);
     }
 
     @ExceptionHandler(DomainException.class)
@@ -171,12 +182,25 @@ public class GlobalExceptionHandler {
         );
     }
 
+    // Authorization exception
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(
+            AuthorizationDeniedException ex
+    ) {
+        return buildError(
+                HttpStatus.FORBIDDEN,
+                "You don't have permission to access this resource."
+        );
+    }
+
+
     // Fallback exception
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> unexpectedException(
             Exception ex
     ) {
+        log.error("error: ", ex);
         return buildError(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "An unexpected error occurred."

@@ -63,7 +63,7 @@ public class User {
         this.email = email;
         this.passwordHash = passwordHash;
 
-        this.role = Role.CLIENT;
+        this.role = Role.USER;
         this.enabled = true;
 
         OffsetDateTime now = OffsetDateTime.now();
@@ -111,8 +111,8 @@ public class User {
         touch();
     }
 
-    public void demoteToClient() {
-        this.role = Role.CLIENT;
+    public void demoteToUser() {
+        this.role = Role.USER;
         touch();
     }
 

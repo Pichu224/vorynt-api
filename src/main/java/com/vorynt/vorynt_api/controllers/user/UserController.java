@@ -5,11 +5,13 @@ import com.vorynt.vorynt_api.dtos.user.CreateUserRequest;
 import com.vorynt.vorynt_api.dtos.user.UpdateUserRequest;
 import com.vorynt.vorynt_api.dtos.user.UserResponse;
 import com.vorynt.vorynt_api.mappers.UserMapper;
+import com.vorynt.vorynt_api.services.auth.RegisterUserUseCase;
 import com.vorynt.vorynt_api.services.user.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -23,14 +25,16 @@ public class UserController {
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
+    private final GetCurrentUserUseCase  getCurrentUserUseCase;
     private final UserMapper userMapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> create(
             @Valid @RequestBody CreateUserRequest request
     ) {
 
-        User user = registerUserUseCase.execute(
+        User user = registerUserUseCase.execute( // todo - cambiar a hacer un create user.
                 request.firstName(),
                 request.lastName(),
                 request.email(),
@@ -85,6 +89,15 @@ public class UserController {
             @PathVariable Long id
     ) {
         User user = getUserByIdUseCase.execute(id);
+
+        UserResponse response = userMapper.toResponse(user);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        User user = getCurrentUserUseCase.execute();
 
         UserResponse response = userMapper.toResponse(user);
 

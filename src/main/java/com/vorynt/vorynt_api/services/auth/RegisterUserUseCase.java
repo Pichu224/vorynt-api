@@ -1,10 +1,11 @@
-package com.vorynt.vorynt_api.services.user;
+package com.vorynt.vorynt_api.services.auth;
 
 import com.vorynt.vorynt_api.domain.exceptions.EmailAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.persistence.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterUserUseCase {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public User execute(
             String firstName,
             String lastName,
             String email,
-            String passwordHash
+            String rawPassword
     ) {
 
         Email userEmail = Email.of(email);
@@ -32,7 +34,7 @@ public class RegisterUserUseCase {
                     firstName,
                     lastName,
                     userEmail,
-                    passwordHash
+                    rawPassword
             );
         }
 
@@ -44,7 +46,7 @@ public class RegisterUserUseCase {
                 existingUser,
                 firstName,
                 lastName,
-                passwordHash
+                rawPassword
         );
     }
 
@@ -52,14 +54,16 @@ public class RegisterUserUseCase {
             String firstName,
             String lastName,
             Email email,
-            String passwordHash
+            String rawPassword
     ) {
+        String encodedPassword =
+                passwordEncoder.encode(rawPassword);
 
         User user = User.create(
                 firstName,
                 lastName,
                 email,
-                passwordHash
+                encodedPassword
         );
 
         return userRepository.save(user);
@@ -69,13 +73,15 @@ public class RegisterUserUseCase {
             User user,
             String firstName,
             String lastName,
-            String passwordHash
+            String rawPassword
     ) {
+        String encodedPassword =
+                passwordEncoder.encode(rawPassword);
 
         user.reactivate(
                 firstName,
                 lastName,
-                passwordHash
+                encodedPassword
         );
 
         return userRepository.save(user);

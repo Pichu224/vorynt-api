@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UpdateUserRequest(
 
-        @NotBlank
+        @NotBlank(message = "First name is required.")
         String firstName,
 
-        @NotBlank
+        @NotBlank(message = "Last name is required.")
         String lastName
 ) {}
