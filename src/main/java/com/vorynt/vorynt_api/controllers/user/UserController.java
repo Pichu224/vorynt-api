@@ -50,6 +50,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@userSecurity.canModifyUser(#id)")
     public ResponseEntity<UserResponse> updateById(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request
@@ -67,6 +68,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@userSecurity.canModifyUser(#id)")
     public ResponseEntity<Void> deleteById(
             @PathVariable Long id
     ) {
@@ -76,6 +78,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsers(
     ) {
         List<User> users = getAllUsersUseCase.execute();
