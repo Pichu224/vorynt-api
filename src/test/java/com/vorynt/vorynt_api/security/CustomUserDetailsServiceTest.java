@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.security;
 
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.persistence.repositories.UserRepository;
@@ -34,7 +35,8 @@ class CustomUserDetailsServiceTest {
                 "Alan",
                 "Acuna",
                 Email.of("alan@gmail.com"),
-                "passwordHash"
+                "passwordHash",
+                Role.USER
         );
     }
 

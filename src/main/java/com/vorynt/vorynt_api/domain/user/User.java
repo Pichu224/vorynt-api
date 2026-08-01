@@ -49,7 +49,8 @@ public class User {
             String firstName,
             String lastName,
             Email email,
-            String passwordHash
+            String passwordHash,
+            Role role
     ) {
         validateRequired(firstName, "firstName");
         validateRequired(lastName, "lastName");
@@ -63,7 +64,7 @@ public class User {
         this.email = email;
         this.passwordHash = passwordHash;
 
-        this.role = Role.USER;
+        this.role = role;
         this.enabled = true;
 
         OffsetDateTime now = OffsetDateTime.now();
@@ -75,9 +76,10 @@ public class User {
             String firstName,
             String lastName,
             Email email,
-            String passwordHash
+            String passwordHash,
+            Role role
     ) {
-        return new User(firstName, lastName, email, passwordHash);
+        return new User(firstName, lastName, email, passwordHash, role);
     }
 
     public void changeFirstName(String firstName) {

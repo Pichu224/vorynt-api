@@ -1,10 +1,9 @@
 package com.vorynt.vorynt_api.controllers.auth;
 
-import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.dtos.auth.AuthResponse;
 import com.vorynt.vorynt_api.dtos.auth.LoginRequest;
 import com.vorynt.vorynt_api.dtos.auth.RegisterRequest;
-import com.vorynt.vorynt_api.services.auth.LoginUseCase;
+import com.vorynt.vorynt_api.services.auth.LoginUserUseCase;
 import com.vorynt.vorynt_api.services.auth.RegisterUserUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final LoginUseCase loginUseCase;
+    private final LoginUserUseCase loginUseCase;
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("/login")

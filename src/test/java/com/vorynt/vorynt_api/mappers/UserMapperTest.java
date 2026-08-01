@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.mappers;
 
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.dtos.user.UserResponse;
@@ -32,7 +33,8 @@ class UserMapperTest {
                 "Alan",
                 "acuna",
                 Email.of("alan@gmail.com"),
-                "123456"
+                "123456",
+                Role.USER
         );
 
         // Act
@@ -55,8 +57,11 @@ class UserMapperTest {
         // Arrange
 
         List<User> users = List.of(
-                User.create("Alan", "acuna", Email.of("alan@gmail.com"), "hash"),
-                User.create("Juan", "Perez", Email.of("juan@gmail.com"), "hash")
+                User.create("Alan", "acuna",
+                        Email.of("alan@gmail.com"), "hash", Role.USER),
+
+                User.create("Juan", "Perez",
+                        Email.of("juan@gmail.com"), "hash", Role.USER)
         );
 
         // Act

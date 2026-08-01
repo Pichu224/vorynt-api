@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.security;
 
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import io.jsonwebtoken.Jwts;
@@ -48,7 +49,8 @@ class JwtServiceTest {
                 "Alan",
                 "Acuna",
                 Email.of("alan@gmail.com"),
-                "passwordHash"
+                "passwordHash",
+                Role.USER
         );
 
         userDetails = CustomUserDetails.from(user);
@@ -98,7 +100,8 @@ class JwtServiceTest {
                 "Juan",
                 "Perez",
                 Email.of("juan@gmail.com"),
-                "passwordHash"
+                "passwordHash",
+                Role.USER
         );
 
         CustomUserDetails anotherUserDetails =

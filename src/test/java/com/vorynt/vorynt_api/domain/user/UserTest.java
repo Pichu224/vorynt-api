@@ -14,7 +14,8 @@ class UserTest {
                 "Alan",
                 "Acuna",
                 Email.of("alan@gmail.com"),
-                "hashedPassword"
+                "hashedPassword",
+                Role.USER
         );
     }
 
@@ -29,7 +30,8 @@ class UserTest {
                 "Alan",
                 "Acuna",
                 email,
-                "hashedPassword"
+                "hashedPassword",
+                Role.USER
         );
 
         // Assert
@@ -53,7 +55,8 @@ class UserTest {
                 "  Alan ",
                 " Acuna   ",
                 Email.of("alan@gmail.com"),
-                "hashedPassword"
+                "hashedPassword",
+                Role.USER
         );
 
         // Assert
@@ -229,7 +232,8 @@ class UserTest {
                         "",
                         "Acuna",
                         Email.of("alan@gmail.com"),
-                        "hashedPassword"
+                        "hashedPassword",
+                        Role.USER
                 )
         );
     }
@@ -243,7 +247,8 @@ class UserTest {
                         "Alan",
                         "",
                         Email.of("alan@gmail.com"),
-                        "hashedPassword"
+                        "hashedPassword",
+                        Role.USER
                 )
         );
     }
@@ -257,7 +262,8 @@ class UserTest {
                         "Alan",
                         "Acuna",
                         Email.of("alan@gmail.com"),
-                        null
+                        null,
+                        Role.USER
                 )
         );
     }
@@ -271,7 +277,8 @@ class UserTest {
                         "Alan",
                         "Acuna",
                         null,
-                        "hashedPassword"
+                        "hashedPassword",
+                        Role.USER
                 )
         );
     }

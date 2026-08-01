@@ -1,6 +1,7 @@
 package com.vorynt.vorynt_api.controllers.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.dtos.auth.LoginRequest;
@@ -8,7 +9,7 @@ import com.vorynt.vorynt_api.dtos.auth.RegisterRequest;
 import com.vorynt.vorynt_api.handlers.GlobalExceptionHandler;
 import com.vorynt.vorynt_api.security.JwtAuthenticationEntryPoint;
 import com.vorynt.vorynt_api.security.JwtAuthenticationFilter;
-import com.vorynt.vorynt_api.services.auth.LoginUseCase;
+import com.vorynt.vorynt_api.services.auth.LoginUserUseCase;
 import com.vorynt.vorynt_api.services.auth.RegisterUserUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ class AuthControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private LoginUseCase loginUseCase;
+    private LoginUserUseCase loginUseCase;
 
     @MockBean
     private RegisterUserUseCase registerUserUseCase;
@@ -105,7 +106,8 @@ class AuthControllerTest {
                 "Alan",
                 "Acuna",
                 Email.of("alan@gmail.com"),
-                "hash"
+                "hash",
+                Role.USER
         );
 
         when(registerUserUseCase.execute(

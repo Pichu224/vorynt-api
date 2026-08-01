@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.services.user;
 
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.persistence.repositories.UserRepository;
@@ -26,8 +27,11 @@ class GetAllUsersUseCaseTest {
 
         // Arrange
         List<User> users = List.of(
-                User.create("Alan", "acuna", Email.of("alan@gmail.com"), "hash"),
-                User.create("Juan", "Perez", Email.of("juan@gmail.com"), "hash")
+                User.create("Alan", "acuna",
+                        Email.of("alan@gmail.com"), "hash", Role.USER),
+
+                User.create("Juan", "Perez",
+                        Email.of("juan@gmail.com"), "hash", Role.USER)
         );
 
         when(repository.findAllByEnabledTrue()).thenReturn(users);

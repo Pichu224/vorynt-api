@@ -3,6 +3,7 @@ package com.vorynt.vorynt_api.controllers.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vorynt.vorynt_api.domain.exceptions.EmailAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.exceptions.UserNotFoundException;
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.dtos.user.CreateUserRequest;
@@ -62,110 +63,114 @@ class UserControllerTest {
     private GetCurrentUserUseCase getCurrentUserUseCase;
 
     @MockBean
+    private CreateUserUseCase createUserUseCase;
+
+    @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @MockBean
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-//    @Test
-//    void shouldCreateUserSuccessfully() throws Exception {
-//
-//        // Arrange
-//        CreateUserRequest request = new CreateUserRequest(
-//                "Alan",
-//                "acuna",
-//                "alan@gmail.com",
-//                "123456"
-//        );
-//
-//        User user = User.create(
-//                "Alan",
-//                "acuna",
-//                Email.of("alan@gmail.com"),
-//                "123456"
-//        );
-//
-//        when(userMapper.toResponse(any(User.class)))
-//                .thenReturn(new UserResponse(
-//                        1L,
-//                        "Alan",
-//                        "acuna",
-//                        "alan@gmail.com"
-//                ));
-//
-//        when(registerUserUseCase.execute(
-//                anyString(),
-//                anyString(),
-//                anyString(),
-//                anyString()
-//        )).thenReturn(user);
-//
-//        // Act & Assert
-//        mockMvc.perform(post("/users")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request))
-//                        .with(user("alan").roles("USER")))
-//
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.firstName").value("Alan"))
-//                .andExpect(jsonPath("$.lastName").value("acuna"))
-//                .andExpect(jsonPath("$.email").value("alan@gmail.com"));
-//
-//        verify(registerUserUseCase, times(1))
-//                .execute(
-//                        "Alan",
-//                        "acuna",
-//                        "alan@gmail.com",
-//                        "123456"
-//                );
-//
-//        verify(userMapper, times(1))
-//                .toResponse(user);
-//    }
-//
-//    @Test
-//    void shouldReturnConflictWhenEmailAlreadyExists() throws Exception {
-//
-//        // Arrange
-//
-//        CreateUserRequest request = new CreateUserRequest(
-//                "Alan",
-//                "acuna",
-//                "alan@gmail.com",
-//                "123456"
-//        );
-//
-//        when(registerUserUseCase.execute(
-//                anyString(),
-//                anyString(),
-//                anyString(),
-//                anyString()
-//        )).thenThrow(new EmailAlreadyExistsException(
-//                Email.of(request.email()))
-//        );
-//
-//        // Act & Assert
-//
-//        mockMvc.perform(post("/users")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request))
-//                        .with(user("alan").roles("USER")))
-//
-//                .andExpect(status().isConflict())
-//                .andExpect(jsonPath("$.status").value(409))
-//                .andExpect(jsonPath("$.error").value("CONFLICT"))
-//                .andExpect(jsonPath("$.message")
-//                        .value("Email 'alan@gmail.com' is already registered."));
-//
-//        verify(registerUserUseCase).execute(
-//                "Alan",
-//                "acuna",
-//                "alan@gmail.com",
-//                "123456"
-//        );
-//
-//        verifyNoInteractions(userMapper);
-//    }
+    @Test
+    void shouldCreateUserSuccessfully() throws Exception {
+
+        // Arrange
+        CreateUserRequest request = new CreateUserRequest(
+                "Alan",
+                "acuna",
+                "alan@gmail.com",
+                "123456"
+        );
+
+        User user = User.create(
+                "Alan",
+                "acuna",
+                Email.of("alan@gmail.com"),
+                "123456",
+                Role.USER
+        );
+
+        when(userMapper.toResponse(any(User.class)))
+                .thenReturn(new UserResponse(
+                        1L,
+                        "Alan",
+                        "acuna",
+                        "alan@gmail.com"
+                ));
+
+        when(createUserUseCase.execute(
+                anyString(),
+                anyString(),
+                anyString(),
+                anyString()
+        )).thenReturn(user);
+
+        // Act & Assert
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .with(user("alan").roles("USER")))
+
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName").value("Alan"))
+                .andExpect(jsonPath("$.lastName").value("acuna"))
+                .andExpect(jsonPath("$.email").value("alan@gmail.com"));
+
+        verify(createUserUseCase, times(1))
+                .execute(
+                        "Alan",
+                        "acuna",
+                        "alan@gmail.com",
+                        "123456"
+                );
+
+        verify(userMapper, times(1))
+                .toResponse(user);
+    }
+
+    @Test
+    void shouldReturnConflictWhenEmailAlreadyExists() throws Exception {
+
+        // Arrange
+
+        CreateUserRequest request = new CreateUserRequest(
+                "Alan",
+                "acuna",
+                "alan@gmail.com",
+                "123456"
+        );
+
+        when(createUserUseCase.execute(
+                anyString(),
+                anyString(),
+                anyString(),
+                anyString()
+        )).thenThrow(new EmailAlreadyExistsException(
+                Email.of(request.email()))
+        );
+
+        // Act & Assert
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .with(user("alan").roles("USER")))
+
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.error").value("CONFLICT"))
+                .andExpect(jsonPath("$.message")
+                        .value("Email 'alan@gmail.com' is already registered."));
+
+        verify(createUserUseCase).execute(
+                "Alan",
+                "acuna",
+                "alan@gmail.com",
+                "123456"
+        );
+
+        verifyNoInteractions(userMapper);
+    }
 
     @Test
     void shouldUpdateUserSuccessfully() throws Exception {
@@ -180,7 +185,8 @@ class UserControllerTest {
                 "Juan",
                 "Sultana",
                 Email.of("alan@gmail.com"),
-                "123456"
+                "123456",
+                Role.USER
         );
 
         when(userMapper.toResponse(any(User.class)))
@@ -309,7 +315,8 @@ class UserControllerTest {
                 "Alan",
                 "acuna",
                 Email.of("alan@gmail.com"),
-                "123456"
+                "123456",
+                Role.USER
         );
 
         when(userMapper.toResponse(any(User.class)))
@@ -378,8 +385,11 @@ class UserControllerTest {
         // Arrange
 
         List<User> users = List.of(
-                User.create("Alan", "acuna", Email.of("alan@gmail.com"), "hash"),
-                User.create("Juan", "Perez", Email.of("juan@gmail.com"), "hash")
+                User.create("Alan", "acuna",
+                        Email.of("alan@gmail.com"), "hash", Role.USER),
+
+                User.create("Juan", "Perez",
+                        Email.of("juan@gmail.com"), "hash", Role.USER)
         );
 
         List<UserResponse> userResponses = List.of(

@@ -1,6 +1,7 @@
 package com.vorynt.vorynt_api.services.user;
 
 import com.vorynt.vorynt_api.domain.exceptions.UserNotFoundException;
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.persistence.repositories.UserRepository;
@@ -30,7 +31,8 @@ class DeleteUserUseCaseTest {
                 "Alan",
                 "acuna",
                 Email.of("alan@gmail.com"),
-                "hash"
+                "hash",
+                Role.USER
         );
 
         when(repository.findByIdAndEnabledTrue(1L)).thenReturn(Optional.of(user));

@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import java.io.Console;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -192,7 +190,6 @@ public class GlobalExceptionHandler {
                 "You don't have permission to access this resource."
         );
     }
-
 
     // Fallback exception
 

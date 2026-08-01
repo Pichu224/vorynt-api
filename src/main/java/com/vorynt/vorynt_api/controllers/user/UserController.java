@@ -26,6 +26,7 @@ public class UserController {
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
     private final GetCurrentUserUseCase  getCurrentUserUseCase;
+    private final CreateUserUseCase createUserUseCase;
     private final UserMapper userMapper;
 
     @PostMapping
@@ -34,7 +35,7 @@ public class UserController {
             @Valid @RequestBody CreateUserRequest request
     ) {
 
-        User user = registerUserUseCase.execute( // todo - cambiar a hacer un create user.
+        User user = createUserUseCase.execute(
                 request.firstName(),
                 request.lastName(),
                 request.email(),

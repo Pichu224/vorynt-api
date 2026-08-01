@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginUseCase {
+public class LoginUserUseCase {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;

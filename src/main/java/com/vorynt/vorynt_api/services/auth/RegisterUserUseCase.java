@@ -1,6 +1,7 @@
 package com.vorynt.vorynt_api.services.auth;
 
 import com.vorynt.vorynt_api.domain.exceptions.EmailAlreadyExistsException;
+import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
 import com.vorynt.vorynt_api.persistence.repositories.UserRepository;
@@ -63,7 +64,8 @@ public class RegisterUserUseCase {
                 firstName,
                 lastName,
                 email,
-                encodedPassword
+                encodedPassword,
+                Role.USER
         );
 
         return userRepository.save(user);
