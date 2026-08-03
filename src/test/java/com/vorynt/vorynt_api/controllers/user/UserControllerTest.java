@@ -254,7 +254,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.message")
-                        .value("Don't exist an User with id: 1"));
+                        .value("Don't exist an user with id: 1"));
 
         verify(updateUserUseCase).execute(
                 1L,
@@ -297,7 +297,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.message")
-                        .value("Don't exist an User with id: 1"));
+                        .value("Don't exist an user with id: 1"));
 
         verify(deleteUserUseCase).execute(
                 1L
@@ -370,7 +370,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.message")
-                        .value("Don't exist an User with id: 1"));
+                        .value("Don't exist an user with id: 1"));
 
         verify(getUserByIdUseCase).execute(
                 1L

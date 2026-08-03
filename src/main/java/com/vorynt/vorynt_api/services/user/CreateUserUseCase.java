@@ -1,6 +1,7 @@
 package com.vorynt.vorynt_api.services.user;
 
 import com.vorynt.vorynt_api.domain.exceptions.EmailAlreadyExistsException;
+import com.vorynt.vorynt_api.domain.exceptions.UserNotFoundException;
 import com.vorynt.vorynt_api.domain.user.Role;
 import com.vorynt.vorynt_api.domain.user.User;
 import com.vorynt.vorynt_api.domain.user.valueObjects.Email;
@@ -18,12 +19,12 @@ public class CreateUserUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User execute(
+    public User execute (
             String firstName,
             String lastName,
             String email,
             String rawPassword
-    ) {
+    ) throws EmailAlreadyExistsException {
 
         Email userEmail = Email.of(email);
 

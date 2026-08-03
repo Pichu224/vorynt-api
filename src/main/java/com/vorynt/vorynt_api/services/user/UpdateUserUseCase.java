@@ -14,12 +14,17 @@ public class UpdateUserUseCase {
     private final UserRepository userRepository;
 
     @Transactional
-    public User execute(Long id, String firstName, String lastName) {
+    public User execute(
+            Long id,
+            String newFirstName,
+            String newLastName
+    )  throws UserNotFoundException {
+
         User user = userRepository.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        user.changeFirstName(firstName);
-        user.changeLastName(lastName);
+        user.changeFirstName(newFirstName);
+        user.changeLastName(newLastName);
 
         return user;
     }
