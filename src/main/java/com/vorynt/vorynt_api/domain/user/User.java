@@ -119,11 +119,13 @@ public class User {
     }
 
     public void activate() {
+        if(enabled) return;
         this.enabled = true;
         touch();
     }
 
     public void deactivate() {
+        if(!enabled) return;
         this.enabled = false;
         touch();
     }

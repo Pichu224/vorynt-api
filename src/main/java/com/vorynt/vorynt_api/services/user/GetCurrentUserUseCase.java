@@ -14,7 +14,7 @@ public class GetCurrentUserUseCase {
 
     private final UserRepository userRepository;
 
-    public User execute() {
+    public User execute() throws UserNotFoundException {
         Long userId = ((CustomUserDetails) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
