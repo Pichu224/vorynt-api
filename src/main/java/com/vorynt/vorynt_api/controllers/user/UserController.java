@@ -79,7 +79,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponse>> getAllUsers(
+    public ResponseEntity<List<UserResponse>> getAll(
     ) {
         List<User> users = getAllUsersUseCase.execute();
 
@@ -89,7 +89,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(
+    public ResponseEntity<UserResponse> getById(
             @PathVariable Long id
     ) {
         User user = getUserByIdUseCase.execute(id);
@@ -100,7 +100,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> getCurrentUser() {
+    public ResponseEntity<UserResponse> getCurrent() {
         User user = getCurrentUserUseCase.execute();
 
         UserResponse response = userMapper.toResponse(user);

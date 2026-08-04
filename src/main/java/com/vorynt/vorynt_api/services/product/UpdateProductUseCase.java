@@ -2,6 +2,7 @@ package com.vorynt.vorynt_api.services.product;
 
 import com.vorynt.vorynt_api.domain.exceptions.ProductAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.exceptions.ProductNotFoundException;
+import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
 import com.vorynt.vorynt_api.domain.product.Product;
 import com.vorynt.vorynt_api.persistence.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,10 @@ public class UpdateProductUseCase {
             String newName,
             String newDescription,
             BigDecimal newPrice
-    ) throws ProductNotFoundException, ProductAlreadyExistsException {
+    ) throws ProductNotFoundException, ProductAlreadyExistsException, RequiredFieldException {
+
+        if(newName == null)
+            throw new RequiredFieldException("product");
 
         String trimmedName = newName.trim().toLowerCase();
 

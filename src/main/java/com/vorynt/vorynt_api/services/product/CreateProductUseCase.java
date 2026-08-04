@@ -1,6 +1,8 @@
 package com.vorynt.vorynt_api.services.product;
 
 import com.vorynt.vorynt_api.domain.exceptions.ProductAlreadyExistsException;
+import com.vorynt.vorynt_api.domain.exceptions.ProductNotFoundException;
+import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
 import com.vorynt.vorynt_api.domain.product.Product;
 import com.vorynt.vorynt_api.persistence.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -19,7 +21,10 @@ public class CreateProductUseCase {
             String name,
             String description,
             BigDecimal price
-    ) {
+    ) throws ProductNotFoundException, ProductAlreadyExistsException, RequiredFieldException {
+        if(name == null)
+            throw new RequiredFieldException("Product name is required");
+
         String normalizedName = name.trim().toLowerCase();
 
         if(productRepository.existsByNameIgnoreCase(normalizedName))

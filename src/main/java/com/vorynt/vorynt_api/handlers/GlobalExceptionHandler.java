@@ -107,6 +107,27 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.BAD_REQUEST, ex);
     }
 
+    @ExceptionHandler(InvalidPriceException.class)
+    public ResponseEntity<ApiErrorResponse> invalidPriceException(
+        InvalidPriceException ex
+    ) {
+        return buildError(HttpStatus.BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler(ProductAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> productAlreadyExistsException(
+            ProductAlreadyExistsException ex
+    ) {
+        return buildError(HttpStatus.CONFLICT, ex);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> productNotFoundException(
+            ProductNotFoundException ex
+    ) {
+        return buildError(HttpStatus.NOT_FOUND, ex);
+    }
+
     // Validation exceptions
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
