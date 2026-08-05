@@ -26,7 +26,7 @@ public class UpdateProductUseCase {
     ) throws ProductNotFoundException, ProductAlreadyExistsException, RequiredFieldException {
 
         if(newName == null)
-            throw new RequiredFieldException("product");
+            throw new RequiredFieldException("name");
 
         String trimmedName = newName.trim().toLowerCase();
 
@@ -36,7 +36,6 @@ public class UpdateProductUseCase {
         if(!product.getName().toLowerCase().equals(trimmedName) &&
                 productRepository.existsByNameIgnoreCase(trimmedName))
             throw new ProductAlreadyExistsException(trimmedName);
-
 
         product.changeName(newName);
         product.changeDescription(newDescription);
