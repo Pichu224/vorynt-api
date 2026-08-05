@@ -23,7 +23,7 @@ public class CreateProductUseCase {
             BigDecimal price
     ) throws ProductNotFoundException, ProductAlreadyExistsException, RequiredFieldException {
         if(name == null)
-            throw new RequiredFieldException("Product name is required");
+            throw new RequiredFieldException("name");
 
         String normalizedName = name.trim().toLowerCase();
 

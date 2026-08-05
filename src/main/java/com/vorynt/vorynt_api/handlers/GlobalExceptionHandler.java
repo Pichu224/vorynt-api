@@ -128,6 +128,20 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.NOT_FOUND, ex);
     }
 
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> categoryAlreadyExistsException(
+            CategoryAlreadyExistsException ex
+    ) {
+        return buildError(HttpStatus.CONFLICT, ex);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> categoryNotFoundException(
+            CategoryNotFoundException ex
+    ) {
+        return buildError(HttpStatus.NOT_FOUND, ex);
+    }
+
     // Validation exceptions
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

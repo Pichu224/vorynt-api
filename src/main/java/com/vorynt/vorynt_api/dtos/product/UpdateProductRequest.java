@@ -11,7 +11,6 @@ public record UpdateProductRequest(
         @NotBlank(message = "name is required.")
         String name,
 
-        @NotBlank(message = "description is required.")
         String description,
 
         @NotNull(message = "Price is required.")
