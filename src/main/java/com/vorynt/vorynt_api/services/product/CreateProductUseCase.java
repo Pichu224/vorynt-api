@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.services.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.ProductAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.exceptions.ProductNotFoundException;
 import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
@@ -20,7 +21,8 @@ public class CreateProductUseCase {
     public Product execute(
             String name,
             String description,
-            BigDecimal price
+            BigDecimal price,
+            Category category
     ) throws ProductNotFoundException, ProductAlreadyExistsException, RequiredFieldException {
         if(name == null)
             throw new RequiredFieldException("name");
@@ -33,7 +35,8 @@ public class CreateProductUseCase {
         Product product = Product.create(
                 name,
                 description,
-                price
+                price,
+                category
         );
 
         return productRepository.save(product);

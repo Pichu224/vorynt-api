@@ -1,8 +1,13 @@
 package com.vorynt.vorynt_api.domain.category;
 
 import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
+import com.vorynt.vorynt_api.domain.product.Product;
 import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryTest {
@@ -10,13 +15,24 @@ class CategoryTest {
     @Test
     void shouldCreateCategory() {
 
+        List<Product> products = List.of(
+                Product.create(
+                    "Laptop",
+                    "Gaming Laptop",
+                    BigDecimal.valueOf(1000),
+                    null
+                )
+        );
+
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                products
         );
 
         assertEquals("Notebooks", category.getName());
         assertEquals("Gaming notebooks", category.getDescription());
+        assertEquals(products, category.getProducts());
 
         assertTrue(category.isEnabled());
 
@@ -27,13 +43,24 @@ class CategoryTest {
     @Test
     void shouldTrimNameAndDescription() {
 
+        List<Product> products = List.of(
+                Product.create(
+                        "Laptop",
+                        "Gaming Laptop",
+                        BigDecimal.valueOf(1000),
+                        null
+                )
+        );
+
         Category category = Category.create(
                 "   Notebooks   ",
-                "   Gaming notebooks   "
+                "   Gaming notebooks   ",
+                products
         );
 
         assertEquals("Notebooks", category.getName());
         assertEquals("Gaming notebooks", category.getDescription());
+        assertEquals(products, category.getProducts());
     }
 
     @Test
@@ -41,10 +68,23 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                null
+                null,
+                List.of()
         );
 
         assertNull(category.getDescription());
+    }
+
+    @Test
+    void shouldAllowNullProducts() {
+
+        Category category = Category.create(
+                "Notebooks",
+                "Gaming Laptop",
+                List.of()
+        );
+
+        assertEquals(ArrayList.class, category.getProducts().getClass());
     }
 
     @Test
@@ -54,7 +94,8 @@ class CategoryTest {
                 RequiredFieldException.class,
                 () -> Category.create(
                         null,
-                        "Description"
+                        "Description",
+                        List.of()
                 )
         );
     }
@@ -66,7 +107,8 @@ class CategoryTest {
                 RequiredFieldException.class,
                 () -> Category.create(
                         "   ",
-                        "Description"
+                        "Description",
+                        List.of()
                 )
         );
     }
@@ -76,7 +118,8 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                List.of()
         );
 
         OffsetDateTime before = category.getUpdatedAt();
@@ -92,7 +135,8 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                List.of()
         );
 
         OffsetDateTime before = category.getUpdatedAt();
@@ -108,7 +152,8 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                List.of()
         );
 
         category.deactivate();
@@ -121,7 +166,8 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                List.of()
         );
 
         category.deactivate();
@@ -138,7 +184,8 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                List.of()
         );
 
         category.deactivate();
@@ -153,7 +200,8 @@ class CategoryTest {
 
         Category category = Category.create(
                 "Notebooks",
-                "Gaming notebooks"
+                "Gaming notebooks",
+                List.of()
         );
 
         OffsetDateTime updatedAt = category.getUpdatedAt();

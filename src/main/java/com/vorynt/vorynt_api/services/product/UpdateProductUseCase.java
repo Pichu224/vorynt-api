@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.services.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.ProductAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.exceptions.ProductNotFoundException;
 import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
@@ -22,7 +23,8 @@ public class UpdateProductUseCase {
             Long id,
             String newName,
             String newDescription,
-            BigDecimal newPrice
+            BigDecimal newPrice,
+            Category newCategory
     ) throws ProductNotFoundException, ProductAlreadyExistsException, RequiredFieldException {
 
         if(newName == null)
@@ -40,6 +42,7 @@ public class UpdateProductUseCase {
         product.changeName(newName);
         product.changeDescription(newDescription);
         product.changePrice(newPrice);
+        product.setCategory(newCategory);
 
         return product;
     }

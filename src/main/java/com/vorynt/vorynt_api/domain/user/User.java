@@ -82,29 +82,29 @@ public class User {
         return new User(firstName, lastName, email, passwordHash, role);
     }
 
-    public void changeFirstName(String firstName) {
-        validateRequired(firstName, "firstName");
-        this.firstName = normalizeName(firstName);
+    public void changeFirstName(String newFirstName) {
+        validateRequired(newFirstName, "firstName");
+        firstName = normalizeName(newFirstName);
         touch();
     }
 
-    public void changeLastName(String lastName) {
-        validateRequired(lastName, "lastName");
-        this.lastName = normalizeName(lastName);
+    public void changeLastName(String newLastName) {
+        validateRequired(newLastName, "lastName");
+        lastName = normalizeName(newLastName);
         touch();
     }
 
-    public void changeEmail(Email email) {
-        if (email == null)
+    public void changeEmail(Email newEmail) {
+        if (newEmail == null)
             throw new InvalidEmailException("Email cannot be null.");
 
-        this.email = email;
+        email = newEmail;
         touch();
     }
 
-    public void changePasswordHash(String passwordHash) {
-        validateRequired(passwordHash, "passwordHash");
-        this.passwordHash = passwordHash;
+    public void changePasswordHash(String newPasswordHash) {
+        validateRequired(newPasswordHash, "passwordHash");
+        passwordHash = newPasswordHash;
         touch();
     }
 

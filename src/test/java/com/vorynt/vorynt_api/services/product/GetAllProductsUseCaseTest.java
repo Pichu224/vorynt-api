@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.services.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.product.Product;
 import com.vorynt.vorynt_api.persistence.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,8 @@ class GetAllProductsUseCaseTest {
     void shouldReturnAllEnabledProducts() {
 
         List<Product> products = List.of(
-                Product.create("Notebook", "Gaming", BigDecimal.valueOf(1000)),
-                Product.create("Mouse", "Wireless", BigDecimal.valueOf(100))
+                Product.create("Notebook", "Gaming", BigDecimal.valueOf(1000), new Category()),
+                Product.create("Mouse", "Wireless", BigDecimal.valueOf(100), new Category())
         );
 
         when(repository.findAllByEnabledTrue())
