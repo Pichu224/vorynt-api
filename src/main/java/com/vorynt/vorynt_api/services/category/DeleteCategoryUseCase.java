@@ -1,6 +1,7 @@
 package com.vorynt.vorynt_api.services.category;
 
 import com.vorynt.vorynt_api.domain.category.Category;
+import com.vorynt.vorynt_api.domain.exceptions.CategoryHasProductsException;
 import com.vorynt.vorynt_api.domain.exceptions.CategoryNotFoundException;
 import com.vorynt.vorynt_api.persistence.repositories.CategoryRepository;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,12 @@ public class DeleteCategoryUseCase {
 
     @Transactional
     public void execute(Long id) throws CategoryNotFoundException {
-         Category category = categoryRepository.findByIdAndEnabledTrue(id)
+        if(categoryRepository.existsProductsById(id))
+            throw new CategoryHasProductsException(id);
+
+        Category category = categoryRepository.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 
-         category.deactivate();
+        category.deactivate();
     }
 }

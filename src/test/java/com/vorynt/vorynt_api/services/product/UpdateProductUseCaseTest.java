@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.services.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.ProductAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.exceptions.ProductNotFoundException;
 import com.vorynt.vorynt_api.domain.product.Product;
@@ -28,11 +29,15 @@ class UpdateProductUseCaseTest {
     @Test
     void shouldUpdateProduct() {
 
+        Category category1 = new Category();
+        Category category2 = new Category();
+
         // Arrange
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                new BigDecimal("1500.00")
+                new BigDecimal("1500.00"),
+                category1
         );
 
         when(repository.findByIdAndEnabledTrue(1L))
@@ -43,13 +48,15 @@ class UpdateProductUseCaseTest {
                 1L,
                 "Notebook Pro",
                 "Gaming notebook RTX",
-                new BigDecimal("1800.00")
+                new BigDecimal("1800.00"),
+                category2
         );
 
         // Assert
         assertEquals("Notebook Pro", updated.getName());
         assertEquals("Gaming notebook RTX", updated.getDescription());
         assertEquals(new BigDecimal("1800.00"), updated.getPrice());
+        assertEquals(category2, updated.getCategory());
 
         verify(repository).findByIdAndEnabledTrue(1L);
         verify(repository).existsByNameIgnoreCase(anyString());
@@ -69,7 +76,8 @@ class UpdateProductUseCaseTest {
                         1L,
                         "Notebook",
                         "Desc",
-                        new BigDecimal("100")
+                        new BigDecimal("100"),
+                        new Category()
                 )
         );
 
@@ -84,7 +92,8 @@ class UpdateProductUseCaseTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming",
-                new BigDecimal("1000")
+                new BigDecimal("1000"),
+                new Category()
         );
 
         when(repository.findByIdAndEnabledTrue(1L))
@@ -100,7 +109,8 @@ class UpdateProductUseCaseTest {
                         1L,
                         "MacBook",
                         "Gaming",
-                        new BigDecimal("1200")
+                        new BigDecimal("1200"),
+                        new Category()
                 )
         );
 
@@ -111,11 +121,15 @@ class UpdateProductUseCaseTest {
     @Test
     void shouldNotCheckDuplicateNameWhenNameDoesNotChange() {
 
+        Category category1 = new Category();
+        Category category2 = new Category();
+
         // Arrange
         Product product = Product.create(
                 "Notebook",
                 "Gaming",
-                new BigDecimal("1000")
+                new BigDecimal("1000"),
+                category1
         );
 
         when(repository.findByIdAndEnabledTrue(1L))
@@ -126,13 +140,15 @@ class UpdateProductUseCaseTest {
                 1L,
                 "Notebook",
                 "Updated description",
-                new BigDecimal("1100")
+                new BigDecimal("1100"),
+                category2
         );
 
         // Assert
         assertEquals("Notebook", updated.getName());
         assertEquals("Updated description", updated.getDescription());
         assertEquals(new BigDecimal("1100"), updated.getPrice());
+        assertEquals(category2, updated.getCategory());
 
         verify(repository).findByIdAndEnabledTrue(1L);
         verify(repository, never()).existsByNameIgnoreCase(anyString());

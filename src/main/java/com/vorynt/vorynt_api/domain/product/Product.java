@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.domain.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.InvalidPriceException;
 import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
 import jakarta.persistence.*;
@@ -35,17 +36,23 @@ public class Product {
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     private Product(
             String name,
             String description,
-            BigDecimal price
+            BigDecimal price,
+            Category category
     ) {
         validateRequired(name, "name");
         validatePrice(price);
 
         this.name = normalizeText(name);
-        this.description = description == null ? null : normalizeText(description);
+        this.description = normalizeText(description);
         this.price = price;
+        this.category = category;
 
         OffsetDateTime now = OffsetDateTime.now();
         createdAt = now;
@@ -56,12 +63,14 @@ public class Product {
     public static Product create(
         String name,
         String description,
-        BigDecimal price
+        BigDecimal price,
+        Category category
     ) {
-        return new Product(name, description, price);
+        return new Product(name, description, price, category);
     }
 
     private String normalizeText(String text) {
+        if(text == null) return null;
         return text.trim();
     }
 
@@ -79,35 +88,44 @@ public class Product {
 
     public void changeName(String newName) {
         validateRequired(newName, "name");
-        this.name = normalizeText(newName);
+        name = normalizeText(newName);
         touch();
     }
 
     public void changeDescription(String newDescription) {
         validateRequired(newDescription, "description");
-        this.description = normalizeText(newDescription);
+        description = normalizeText(newDescription);
         touch();
     }
 
     public void changePrice(BigDecimal newPrice) {
         validatePrice(newPrice);
-        this.price = newPrice;
+        price = newPrice;
         touch();
+    }
+
+    public void setCategory(Category newCategory) {
+        category = newCategory;
+        touch();
+    }
+
+    public boolean hasCategory() {
+        return category != null;
     }
 
     public void deactivate() {
         if(!enabled) return;
-        this.enabled = false;
+        enabled = false;
         touch();
     }
 
     public void activate() {
         if(enabled) return;
-        this.enabled = true;
+        enabled = true;
         touch();
     }
 
     private void touch() {
-        this.updatedAt = OffsetDateTime.now();
+        updatedAt = OffsetDateTime.now();
     }
 }

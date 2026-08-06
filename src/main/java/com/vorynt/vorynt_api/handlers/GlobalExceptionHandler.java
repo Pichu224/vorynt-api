@@ -142,6 +142,20 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.NOT_FOUND, ex);
     }
 
+    @ExceptionHandler(CategoryHasProductsException.class)
+    public ResponseEntity<ApiErrorResponse> categoryHasProductsException(
+            CategoryHasProductsException ex
+    ) {
+        return buildError(HttpStatus.CONFLICT, ex);
+    }
+
+    @ExceptionHandler(ProductInvalidException.class)
+    public ResponseEntity<ApiErrorResponse> productInvalidException(
+            ProductInvalidException ex
+    ) {
+        return buildError(HttpStatus.CONFLICT, ex);
+    }
+
     // Validation exceptions
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

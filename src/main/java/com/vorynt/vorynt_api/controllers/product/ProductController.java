@@ -34,7 +34,8 @@ public class ProductController {
         Product product = createProductUseCase.execute(
                 request.name(),
                 request.description(),
-                request.price()
+                request.price(),
+                request.category()
         );
 
         ProductResponse response = productMapper.toResponse(product);
@@ -54,7 +55,8 @@ public class ProductController {
                 id,
                 request.name(),
                 request.description(),
-                request.price()
+                request.price(),
+                request.category()
         );
 
         ProductResponse response = productMapper.toResponse(product);

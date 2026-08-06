@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -25,8 +27,8 @@ class GetAllCategoryUseCaseTest {
     void shouldReturnAllEnabledCategories() {
 
         List<Category> categories = List.of(
-                Category.create("Components", "Gaming components"),
-                Category.create("Notebooks", "Gaming notebooks")
+                Category.create("Components", "Gaming components", new ArrayList<>()),
+                Category.create("Notebooks", "Gaming notebooks", new ArrayList<>())
         );
 
         when(repository.findAllByEnabledTrue())

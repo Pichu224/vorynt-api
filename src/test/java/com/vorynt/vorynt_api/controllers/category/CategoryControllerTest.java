@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.CategoryAlreadyExistsException;
 import com.vorynt.vorynt_api.domain.exceptions.CategoryNotFoundException;
-import com.vorynt.vorynt_api.dtos.Category.CategoryResponse;
-import com.vorynt.vorynt_api.dtos.Category.CreateCategoryRequest;
-import com.vorynt.vorynt_api.dtos.Category.UpdateCategoryRequest;
+import com.vorynt.vorynt_api.domain.product.Product;
+import com.vorynt.vorynt_api.dtos.category.CategoryResponse;
+import com.vorynt.vorynt_api.dtos.category.CreateCategoryRequest;
+import com.vorynt.vorynt_api.dtos.category.UpdateCategoryRequest;
 import com.vorynt.vorynt_api.handlers.GlobalExceptionHandler;
 import com.vorynt.vorynt_api.mappers.CategoryMapper;
 import com.vorynt.vorynt_api.security.JwtAuthenticationEntryPoint;
@@ -66,25 +67,31 @@ class CategoryControllerTest {
     @Test
     void shouldCreateCategorySuccessfully() throws Exception {
 
+        List<Product> products = List.of();
+
         CreateCategoryRequest request = new CreateCategoryRequest(
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         Category category = Category.create(
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         CategoryResponse response = new CategoryResponse(
                 1L,
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         when(createCategoryUseCase.execute(
                 anyString(),
-                anyString()
+                anyString(),
+                any()
         )).thenReturn(category);
 
         when(categoryMapper.toResponse(category))
@@ -98,11 +105,13 @@ class CategoryControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Mouses"))
-                .andExpect(jsonPath("$.description").value("Gaming mouses"));
+                .andExpect(jsonPath("$.description").value("Gaming mouses"))
+                .andExpect(jsonPath("$.products").isArray());
 
         verify(createCategoryUseCase).execute(
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         verify(categoryMapper).toResponse(category);
@@ -111,14 +120,18 @@ class CategoryControllerTest {
     @Test
     void shouldReturnConflictWhenCreatingDuplicatedCategory() throws Exception {
 
+        List<Product> products = List.of();
+
         CreateCategoryRequest request = new CreateCategoryRequest(
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         when(createCategoryUseCase.execute(
                 anyString(),
-                anyString()
+                anyString(),
+                any()
         )).thenThrow(new CategoryAlreadyExistsException("Mouses"));
 
         mockMvc.perform(post("/categories")
@@ -134,26 +147,32 @@ class CategoryControllerTest {
     @Test
     void shouldUpdateCategorySuccessfully() throws Exception {
 
+        List<Product> products = List.of();
+
         UpdateCategoryRequest request = new UpdateCategoryRequest(
                 "Keyboards",
-                "Mechanical Keyboards"
+                "Mechanical Keyboards",
+                products
         );
 
         Category category = Category.create(
                 "Keyboards",
-                "Mechanical Keyboards"
+                "Mechanical Keyboards",
+                products
         );
 
         CategoryResponse response = new CategoryResponse(
                 1L,
                 "Keyboards",
-                "Mechanical Keyboards"
+                "Mechanical Keyboards",
+                products
         );
 
         when(updateCategoryUseCase.execute(
                 anyLong(),
                 anyString(),
-                anyString()
+                anyString(),
+                any()
         )).thenReturn(category);
 
         when(categoryMapper.toResponse(category))
@@ -166,7 +185,8 @@ class CategoryControllerTest {
 
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Keyboards"))
-                .andExpect(jsonPath("$.description").value("Mechanical Keyboards"));
+                .andExpect(jsonPath("$.description").value("Mechanical Keyboards"))
+                .andExpect(jsonPath("$.products").isArray());
 
         verify(categoryMapper).toResponse(category);
     }
@@ -174,15 +194,19 @@ class CategoryControllerTest {
     @Test
     void shouldReturnNotFoundWhenUpdatingNonExistingCategory() throws Exception {
 
+        List<Product> products = List.of();
+
         UpdateCategoryRequest request = new UpdateCategoryRequest(
                 "Keyboards",
-                "Mechanical Keyboards"
+                "Mechanical Keyboards",
+                products
         );
 
         when(updateCategoryUseCase.execute(
                 anyLong(),
                 anyString(),
-                anyString()
+                anyString(),
+                any()
         )).thenThrow(new CategoryNotFoundException(1L));
 
         mockMvc.perform(put("/categories/1")
@@ -222,15 +246,19 @@ class CategoryControllerTest {
     @Test
     void shouldGetCategoryByIdSuccessfully() throws Exception {
 
+        List<Product> products = List.of();
+
         Category category = Category.create(
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         CategoryResponse response = new CategoryResponse(
                 1L,
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         when(getCategoryByIdUseCase.execute(1L))
@@ -244,7 +272,8 @@ class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Mouses"))
-                .andExpect(jsonPath("$.description").value("Gaming mouses"));
+                .andExpect(jsonPath("$.description").value("Gaming mouses"))
+                .andExpect(jsonPath("$.products").isArray());
 
         verify(categoryMapper).toResponse(category);
     }
@@ -265,15 +294,19 @@ class CategoryControllerTest {
     @Test
     void shouldReturnAllCategories() throws Exception {
 
+        List<Product> products = List.of();
+
         Category category = Category.create(
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         CategoryResponse response = new CategoryResponse(
                 1L,
                 "Mouses",
-                "Gaming mouses"
+                "Gaming mouses",
+                products
         );
 
         when(getAllCategoriesUseCase.execute())
@@ -287,7 +320,8 @@ class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("Mouses"))
-                .andExpect(jsonPath("$[0].description").value("Gaming mouses"));
+                .andExpect(jsonPath("$[0].description").value("Gaming mouses"))
+                .andExpect(jsonPath("$[0].products").isArray());
 
         verify(categoryMapper).toResponseList(List.of(category));
     }

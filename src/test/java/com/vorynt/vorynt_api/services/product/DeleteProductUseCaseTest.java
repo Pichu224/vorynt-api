@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.services.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.ProductNotFoundException;
 import com.vorynt.vorynt_api.domain.product.Product;
 import com.vorynt.vorynt_api.persistence.repositories.ProductRepository;
@@ -30,7 +31,8 @@ class DeleteProductUseCaseTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming",
-                BigDecimal.valueOf(1000)
+                BigDecimal.valueOf(1000),
+                new Category()
         );
 
         when(repository.findByIdAndEnabledTrue(1L))

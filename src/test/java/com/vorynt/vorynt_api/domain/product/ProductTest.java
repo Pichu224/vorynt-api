@@ -1,5 +1,6 @@
 package com.vorynt.vorynt_api.domain.product;
 
+import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.InvalidPriceException;
 import com.vorynt.vorynt_api.domain.exceptions.RequiredFieldException;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,13 @@ class ProductTest {
     @Test
     void shouldCreateProduct() {
 
+        Category category = new Category();
+
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                category
         );
 
         assertEquals("Notebook", product.getName());
@@ -23,6 +27,7 @@ class ProductTest {
         assertEquals(BigDecimal.valueOf(1500), product.getPrice());
 
         assertTrue(product.isEnabled());
+        assertEquals(category, product.getCategory());
 
         assertNotNull(product.getCreatedAt());
         assertNotNull(product.getUpdatedAt());
@@ -34,7 +39,8 @@ class ProductTest {
         Product product = Product.create(
                 "   Notebook   ",
                 "   Gaming notebook   ",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         assertEquals("Notebook", product.getName());
@@ -47,7 +53,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 null,
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         assertNull(product.getDescription());
@@ -61,7 +68,8 @@ class ProductTest {
                 () -> Product.create(
                         null,
                         "Description",
-                        BigDecimal.ONE
+                        BigDecimal.ONE,
+                        new Category()
                 )
         );
     }
@@ -74,7 +82,8 @@ class ProductTest {
                 () -> Product.create(
                         "   ",
                         "Description",
-                        BigDecimal.ONE
+                        BigDecimal.ONE,
+                        new Category()
                 )
         );
     }
@@ -87,7 +96,8 @@ class ProductTest {
                 () -> Product.create(
                         "Notebook",
                         "Description",
-                        null
+                        null,
+                        new Category()
                 )
         );
     }
@@ -100,7 +110,8 @@ class ProductTest {
                 () -> Product.create(
                         "Notebook",
                         "Description",
-                        BigDecimal.ZERO
+                        BigDecimal.ZERO,
+                        new Category()
                 )
         );
     }
@@ -113,7 +124,8 @@ class ProductTest {
                 () -> Product.create(
                         "Notebook",
                         "Description",
-                        BigDecimal.valueOf(-10)
+                        BigDecimal.valueOf(-10),
+                        new Category()
                 )
         );
     }
@@ -124,7 +136,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         OffsetDateTime before = product.getUpdatedAt();
@@ -141,7 +154,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         OffsetDateTime before = product.getUpdatedAt();
@@ -158,7 +172,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         OffsetDateTime before = product.getUpdatedAt();
@@ -175,7 +190,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         product.deactivate();
@@ -189,7 +205,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         product.deactivate();
@@ -207,7 +224,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         product.deactivate();
@@ -223,7 +241,8 @@ class ProductTest {
         Product product = Product.create(
                 "Notebook",
                 "Gaming notebook",
-                BigDecimal.valueOf(1500)
+                BigDecimal.valueOf(1500),
+                new Category()
         );
 
         OffsetDateTime updatedAt = product.getUpdatedAt();

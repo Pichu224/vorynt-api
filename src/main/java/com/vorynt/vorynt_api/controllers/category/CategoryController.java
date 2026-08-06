@@ -1,9 +1,9 @@
 package com.vorynt.vorynt_api.controllers.category;
 
 import com.vorynt.vorynt_api.domain.category.Category;
-import com.vorynt.vorynt_api.dtos.Category.CategoryResponse;
-import com.vorynt.vorynt_api.dtos.Category.CreateCategoryRequest;
-import com.vorynt.vorynt_api.dtos.Category.UpdateCategoryRequest;
+import com.vorynt.vorynt_api.dtos.category.CategoryResponse;
+import com.vorynt.vorynt_api.dtos.category.CreateCategoryRequest;
+import com.vorynt.vorynt_api.dtos.category.UpdateCategoryRequest;
 import com.vorynt.vorynt_api.mappers.CategoryMapper;
 import com.vorynt.vorynt_api.services.category.*;
 import jakarta.validation.Valid;
@@ -33,7 +33,8 @@ public class CategoryController {
     ) {
         Category category = createCategoryUseCase.execute(
                 request.name(),
-                request.description()
+                request.description(),
+                request.products()
         );
 
         CategoryResponse response = categoryMapper.toResponse(category);
@@ -52,7 +53,8 @@ public class CategoryController {
         Category category = updateCategoryUseCase.execute(
                 id,
                 request.name(),
-                request.description()
+                request.description(),
+                request.products()
         );
 
         CategoryResponse response = categoryMapper.toResponse(category);
