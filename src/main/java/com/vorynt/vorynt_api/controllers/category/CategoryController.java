@@ -33,8 +33,7 @@ public class CategoryController {
     ) {
         Category category = createCategoryUseCase.execute(
                 request.name(),
-                request.description(),
-                request.products()
+                request.description()
         );
 
         CategoryResponse response = categoryMapper.toResponse(category);
@@ -53,8 +52,7 @@ public class CategoryController {
         Category category = updateCategoryUseCase.execute(
                 id,
                 request.name(),
-                request.description(),
-                request.products()
+                request.description()
         );
 
         CategoryResponse response = categoryMapper.toResponse(category);

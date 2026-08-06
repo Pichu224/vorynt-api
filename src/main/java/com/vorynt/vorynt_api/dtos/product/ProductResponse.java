@@ -1,7 +1,6 @@
 package com.vorynt.vorynt_api.dtos.product;
 
-import com.vorynt.vorynt_api.domain.category.Category;
-
+import com.vorynt.vorynt_api.dtos.category.CategoryResponse;
 import java.math.BigDecimal;
 
 public record ProductResponse(
@@ -9,5 +8,5 @@ public record ProductResponse(
         String name,
         String description,
         BigDecimal price,
-        Category category
+        CategoryResponse category
 ) {}

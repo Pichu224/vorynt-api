@@ -35,7 +35,7 @@ public class ProductController {
                 request.name(),
                 request.description(),
                 request.price(),
-                request.category()
+                request.categoryId()
         );
 
         ProductResponse response = productMapper.toResponse(product);
@@ -55,8 +55,7 @@ public class ProductController {
                 id,
                 request.name(),
                 request.description(),
-                request.price(),
-                request.category()
+                request.price()
         );
 
         ProductResponse response = productMapper.toResponse(product);

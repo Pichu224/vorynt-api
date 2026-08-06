@@ -4,6 +4,7 @@ import com.vorynt.vorynt_api.domain.category.Category;
 import com.vorynt.vorynt_api.domain.exceptions.*;
 import com.vorynt.vorynt_api.domain.product.Product;
 import com.vorynt.vorynt_api.persistence.repositories.CategoryRepository;
+import com.vorynt.vorynt_api.persistence.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,7 @@ public class CreateCategoryUseCase {
     @Transactional
     public Category execute(
             String name,
-            String description,
-            List<Product> products
+            String description
     ) throws CategoryNotFoundException, CategoryAlreadyExistsException, RequiredFieldException {
         if(name == null)
             throw new RequiredFieldException("name");
@@ -31,7 +31,7 @@ public class CreateCategoryUseCase {
         Category category = Category.create(
                 name,
                 description,
-                products
+                List.of()
         );
 
         return categoryRepository.save(category);
